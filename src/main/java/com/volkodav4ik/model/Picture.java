@@ -14,6 +14,7 @@ public class Picture {
     @Column(name = "file_name")
     private String pictureFileName;
 
+    @Column(length=10485760)
     private String base64;
 
     public Picture() {

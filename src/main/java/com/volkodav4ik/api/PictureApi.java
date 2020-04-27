@@ -1,17 +1,16 @@
 package com.volkodav4ik.api;
 
+import com.volkodav4ik.Const;
 import com.volkodav4ik.dao.PictureDao;
 import com.volkodav4ik.model.Picture;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.Base64;
 import java.util.List;
 
-@Path("/picture")
+@Path("/image")
 public class PictureApi {
 
     @POST
@@ -45,6 +44,24 @@ public class PictureApi {
             return Response.status(Response.Status.OK).entity(base64).build();
         } else {
             return Response.status(Response.Status.BAD_REQUEST).entity("Wrong ID").build();
+        }
+    }
+
+    @GET
+    @Path("/{id}")
+    @Produces("image/jpeg")
+    public Response getImage(@PathParam("id") int id) {
+        String image = PictureDao.getBase64ById(id);
+        if (image != null){
+            byte[] decodedBytes = Base64
+                    .getDecoder()
+                    .decode(image);
+            return Response.ok(decodedBytes).build();
+        } else {
+            byte[] decodedBytes = Base64
+                    .getDecoder()
+                    .decode(Const.NOT_FOUND);
+            return Response.status(Response.Status.BAD_REQUEST).entity(decodedBytes).build();
         }
     }
 
