@@ -8,7 +8,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Base64;
-import java.util.List;
 
 @Path("/image")
 public class PictureApi {
@@ -31,8 +30,7 @@ public class PictureApi {
     @GET
     @Path("/get/all")
     public Response getAllId() {
-        List list = PictureDao.getIdList();
-        String result = list.toString();
+        String result = PictureDao.getIdList().toString();
         return Response.status(Response.Status.OK).entity(result).build();
     }
 
@@ -52,7 +50,7 @@ public class PictureApi {
     @Produces("image/jpeg")
     public Response getImage(@PathParam("id") int id) {
         String image = PictureDao.getBase64ById(id);
-        if (image != null){
+        if (image != null) {
             byte[] decodedBytes = Base64
                     .getDecoder()
                     .decode(image);
